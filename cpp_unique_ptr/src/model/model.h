@@ -17,10 +17,11 @@ namespace MMC {
         class Server {
             double mu;
             uint64_t c;
+            bool is_last;
             std::vector<Entity*> queue;
             std::vector<Entity*> slots;
         public:
-            Server(double mu, uint64_t c);
+            Server(double mu, uint64_t c, bool is_last);
             void enqueue(Entity *entity);
             double dequeue(uint64_t slot);
         };
