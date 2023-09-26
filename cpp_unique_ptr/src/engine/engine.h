@@ -13,14 +13,14 @@ namespace MMC {
         double _time_end;
         double _warmup;
         double _time_now;
-        uint64_t id;
+        size_t id;
         MMC::Model _model;
     public:
         class EventQueue {
         public:
             class Event {
             protected:
-                uint64_t id;
+                size_t id;
                 double _timestamp;
             public:
                 class Comparator {
@@ -36,7 +36,7 @@ namespace MMC {
             };
             class ArrivalEvent : public Event {
             public:
-                ArrivalEvent(uint64_t id, double timestamp);
+                ArrivalEvent(size_t id, double timestamp);
                 void execute(Engine &engine);
                 void execute(Engine &engine, std::ostream &os);
             };
@@ -44,7 +44,7 @@ namespace MMC {
             std::vector<std::unique_ptr<Event> > data;
             Event::Comparator comp;
         public:
-            void add_arrival_event(uint64_t id, double timestamp);
+            void add_arrival_event(size_t id, double timestamp);
             Event &get_event();
             void remove_event();
             size_t size();
@@ -71,9 +71,9 @@ namespace MMC {
             double warmup,
             unsigned seed,
             double lambda,
-            uint64_t n,
+            size_t n,
             double *mu,
-            uint64_t *c);
+            size_t *c);
         void run();
         void run(std::ostream &os);
         EventQueue &event_queue();

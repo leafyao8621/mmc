@@ -6,12 +6,12 @@ size_t MMC::Model::Entity::Hash::operator()(const Entity &a) const {
 }
 
 void MMC::Model::initialize(
-    unsigned seed, double lambda, uint64_t n, double *mu, uint64_t *c) {
+    unsigned seed, double lambda, size_t n, double *mu, size_t *c) {
     this->gen.seed(seed);
     this->lambda = lambda;
     this->servers.reserve(n);
     double *iter_mu = mu;
-    uint64_t *iter_c = c;
+    size_t *iter_c = c;
     for (size_t i = 0; i < n; ++i, ++iter_mu, ++iter_c) {
         this->servers.push_back(Server(*iter_mu, *iter_c, i == n - 1));
     }

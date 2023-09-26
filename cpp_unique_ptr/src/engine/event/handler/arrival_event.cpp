@@ -1,7 +1,7 @@
 #include "../../engine.h"
 
 MMC::Engine::EventQueue::ArrivalEvent::ArrivalEvent(
-    uint64_t id, double timestamp) {
+    size_t id, double timestamp) {
     this->id = id;
     this->_timestamp = timestamp;
 }
