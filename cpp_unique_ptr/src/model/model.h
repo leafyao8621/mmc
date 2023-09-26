@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <vector>
+#include <unordered_set>
 
 #include "../util/generator.h"
 
@@ -11,8 +12,13 @@ namespace MMC {
         double lambda;
         MMC::Generator gen;
     public:
-        struct Entity {
+        class Entity {
+        public:
             double entry_time;
+            class Hash {
+            public:
+                size_t operator()(const Entity &a) const;
+            };
         };
         class Server {
             double mu;
@@ -27,6 +33,7 @@ namespace MMC {
         };
     private:
         std::vector<Server> servers;
+        std::unordered_set<Entity, Entity::Hash> entities;
     public:
         void initialize(
             unsigned seed, double lambda, uint64_t n, double *mu, uint64_t *c);

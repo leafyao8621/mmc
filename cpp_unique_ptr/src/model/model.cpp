@@ -1,5 +1,10 @@
 #include "model.h"
 
+size_t MMC::Model::Entity::Hash::operator()(const Entity &a) const {
+    size_t *x = (size_t*)&a;
+    return *x;
+}
+
 void MMC::Model::initialize(
     unsigned seed, double lambda, uint64_t n, double *mu, uint64_t *c) {
     this->gen.seed(seed);
@@ -8,8 +13,7 @@ void MMC::Model::initialize(
     double *iter_mu = mu;
     uint64_t *iter_c = c;
     for (size_t i = 0; i < n; ++i, ++iter_mu, ++iter_c) {
-        this->servers.push_back(
-            MMC::Model::Server(*iter_mu, *iter_c, i == n - 1));
+        this->servers.push_back(Server(*iter_mu, *iter_c, i == n - 1));
     }
 }
 

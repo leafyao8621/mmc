@@ -15,7 +15,7 @@ void MMC::Engine::EventQueue::ArrivalEvent::execute(Engine &engine) {
 
 void MMC::Engine::EventQueue::ArrivalEvent::execute(
     Engine &engine, std::ostream &os) {
-    MMC::Engine::EventQueue::Event::log(os);
+    Event::log(os);
     os << "Type: Arrival" << std::endl;
     engine.event_queue().add_arrival_event(
         engine.increment_id(),
