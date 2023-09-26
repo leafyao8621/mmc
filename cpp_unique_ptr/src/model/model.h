@@ -11,7 +11,7 @@
 namespace MMC {
     class Model {
         double lambda;
-        MMC::Generator gen;
+        Generator gen;
     public:
         class Entity {
         public:
