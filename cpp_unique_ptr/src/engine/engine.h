@@ -74,13 +74,13 @@ namespace MMC {
             size_t n,
             double *mu,
             size_t *c);
-        void run();
-        void run(std::ostream &os);
         EventQueue &event_queue();
         MMC::Model &model();
         const double &time_end();
         const double &warmup();
         const double &time_now();
+        void run();
+        void run(std::ostream &os);
         uint64_t increment_id();
         void log(std::ostream &os);
     };

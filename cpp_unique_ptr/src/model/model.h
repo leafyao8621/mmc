@@ -24,13 +24,14 @@ namespace MMC {
         class Server {
             double mu;
             size_t c;
-            bool is_last;
+            bool _is_last;
             std::list<Entity*> queue;
             std::vector<Entity*> slots;
         public:
             Server(double mu, size_t c, bool is_last);
+            const bool &is_last();
             void enqueue(Entity *entity);
-            std::tuple<double, bool> dequeue(size_t slot);
+            double dequeue(size_t slot);
             Entity *remove(size_t slot);
         };
     private:
