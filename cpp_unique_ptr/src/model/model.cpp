@@ -1,12 +1,17 @@
 #include "model.h"
 
 size_t MMC::Model::Entity::Hash::operator()(const Entity &a) const {
-    size_t *x = (size_t*)&a;
-    return *x;
+    size_t *x = (size_t*)&a.entry_time;
+    return *x ^ a.id;
 }
 
+bool MMC::Model::Entity::Equal::operator()(
+    const Entity &a, const Entity &b) const {
+    return a.id == b.id && a.entry_time == b.entry_time;
+}
 void MMC::Model::initialize(
     unsigned seed, double lambda, size_t n, double *mu, size_t *c) {
+    this->id = 0;
     this->gen.seed(seed);
     this->lambda = lambda;
     this->servers.reserve(n);
@@ -19,4 +24,11 @@ void MMC::Model::initialize(
 
 double MMC::Model::next_arrival() {
     return this->gen(this->lambda);
+}
+
+const MMC::Model::Entity *MMC::Model::create_entity(double timestamp) {
+    Entity entity {this->id++, timestamp};
+    this->entities.insert(entity);
+    auto ret = this->entities.find(entity);
+    return &(*ret);
 }

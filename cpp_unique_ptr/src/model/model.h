@@ -10,37 +10,45 @@
 
 namespace MMC {
     class Model {
+        size_t id;
         double lambda;
         Generator gen;
     public:
         class Entity {
         public:
+            size_t id;
             double entry_time;
             class Hash {
             public:
                 size_t operator()(const Entity &a) const;
             };
+            class Equal {
+            public:
+                bool operator()(const Entity &a, const Entity &b) const;
+            };
         };
         class Server {
-            double mu;
+            double _mu;
             size_t c;
             bool _is_last;
-            std::list<Entity*> queue;
-            std::vector<Entity*> slots;
+            std::list<const Entity*> queue;
+            std::vector<const Entity*> slots;
         public:
             Server(double mu, size_t c, bool is_last);
             const bool &is_last();
-            void enqueue(Entity *entity);
-            double dequeue(size_t slot);
-            Entity *remove(size_t slot);
+            const double &mu();
+            void enqueue(const Entity *entity);
+            void dequeue(size_t slot);
+            const Entity *remove(size_t slot);
         };
     private:
         std::vector<Server> servers;
-        std::unordered_set<Entity, Entity::Hash> entities;
+        std::unordered_set<Entity, Entity::Hash, Entity::Equal> entities;
     public:
         void initialize(
             unsigned seed, double lambda, size_t n, double *mu, size_t *c);
         double next_arrival();
+        const Entity *create_entity(double timestamp);
     };
 }
 
