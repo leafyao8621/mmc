@@ -20,8 +20,9 @@ void MMC::Engine::log(std::ostream &os) {
     "Time End: " << this->_time_end << std::endl <<
     "Warmup: " << this->_warmup << std::endl <<
     "Time Now: " << this->_time_now << std::endl;
-    this->stats.log(os);
+    this->_stats.log(os);
     this->_event_queue.log(os);
+    this->_model.log(os);
 }
 
 MMC::Engine::EventQueue &MMC::Engine::event_queue() {
@@ -30,6 +31,10 @@ MMC::Engine::EventQueue &MMC::Engine::event_queue() {
 
 MMC::Model &MMC::Engine::model() {
     return this->_model;
+}
+
+MMC::Engine::Stats &MMC::Engine::stats() {
+    return this->_stats;
 }
 
 const double &MMC::Engine::time_end() {

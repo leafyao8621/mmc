@@ -40,11 +40,87 @@ namespace MMC {
                 void execute(Engine &engine);
                 void execute(Engine &engine, std::ostream &os);
             };
+            class EnqueueEvent : public Event {
+                size_t idx;
+                const Model::Entity *entity;
+            public:
+                EnqueueEvent(
+                    size_t id,
+                    double timestamp,
+                    size_t idx,
+                    const Model::Entity *entity);
+                void execute(Engine &engine);
+                void execute(Engine &engine, std::ostream &os);
+            };
+            class DequeueEvent : public Event {
+                size_t idx, slot;
+            public:
+                DequeueEvent(
+                    size_t id, double timestamp, size_t idx, size_t slot);
+                void execute(Engine &engine);
+                void execute(Engine &engine, std::ostream &os);
+            };
+            class EntryEvent : public Event {
+                size_t idx;
+                const Model::Entity *entity;
+            public:
+                EntryEvent(
+                    size_t id,
+                    double timestamp,
+                    size_t idx,
+                    const Model::Entity *entity);
+                void execute(Engine &engine);
+                void execute(Engine &engine, std::ostream &os);
+            };
+            class TransferEvent : public Event {
+                size_t from, slot, to;
+            public:
+                TransferEvent(
+                    size_t id,
+                    double timestamp,
+                    size_t from,
+                    size_t slot,
+                    size_t to);
+                void execute(Engine &engine);
+                void execute(Engine &engine, std::ostream &os);
+            };
+            class DepartureEvent : public Event {
+                size_t slot;
+            public:
+                DepartureEvent(size_t id, double timestamp, size_t slot);
+                void execute(Engine &engine);
+                void execute(Engine &engine, std::ostream &os);
+            };
         private:
             std::vector<std::unique_ptr<Event> > data;
             Event::Comparator comp;
         public:
             void add_arrival_event(size_t id, double timestamp);
+            void add_enqueue_event(
+                size_t id,
+                double timestamp,
+                size_t idx,
+                const Model::Entity *entity);
+            void add_dequeue_event(
+                size_t id,
+                double timestamp,
+                size_t idx,
+                size_t slot);
+            void add_entry_event(
+                size_t id,
+                double timestamp,
+                size_t idx,
+                const Model::Entity *entity);
+            void add_transfer_event(
+                size_t id,
+                double timestamp,
+                size_t from,
+                size_t slot,
+                size_t to);
+            void add_departure_event(
+                size_t id,
+                double timestamp,
+                size_t slot);
             Event &get_event();
             void remove_event();
             size_t size();
@@ -64,7 +140,7 @@ namespace MMC {
             void log(std::ostream &os);
         };
     private:
-        Stats stats;
+        Stats _stats;
     public:
         Engine(
             double time_end,
@@ -76,6 +152,7 @@ namespace MMC {
             size_t *c);
         EventQueue &event_queue();
         MMC::Model &model();
+        Stats &stats();
         const double &time_end();
         const double &warmup();
         const double &time_now();
