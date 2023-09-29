@@ -8,16 +8,20 @@ MMC::Model::Server::Server(double mu, size_t c, bool is_last) {
     this->slots.resize(c, nullptr);
 }
 
-const bool &MMC::Model::Server::is_last() {
+const bool &MMC::Model::Server::is_last() const {
     return this->_is_last;
 }
 
-const double &MMC::Model::Server::mu() {
+const double &MMC::Model::Server::mu() const {
     return this->_mu;
 }
 
-const size_t &MMC::Model::Server::available() {
+const size_t &MMC::Model::Server::available() const {
     return this->_available;
+}
+
+size_t MMC::Model::Server::queue_length() const {
+    return this->queue.size();
 }
 
 void MMC::Model::Server::enqueue(const Entity *entity) {

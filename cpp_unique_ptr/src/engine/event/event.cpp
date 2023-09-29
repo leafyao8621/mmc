@@ -1,8 +1,8 @@
 #include "../engine.h"
 
 bool MMC::Engine::EventQueue::Event::Comparator::operator()(
-    std::unique_ptr<Event> &a,
-    std::unique_ptr<Event> &b) {
+    const std::unique_ptr<Event> &a,
+    const std::unique_ptr<Event> &b) const {
     if (a->_timestamp != b->_timestamp) {
         return a->_timestamp > b->_timestamp;
     } else {
@@ -16,6 +16,6 @@ void MMC::Engine::EventQueue::Event::log(std::ostream &os) {
     "Timestamp: " << this->_timestamp << std::endl;
 }
 
-const double &MMC::Engine::EventQueue::Event::timestamp() {
+const double &MMC::Engine::EventQueue::Event::timestamp() const {
     return this->_timestamp;
 }

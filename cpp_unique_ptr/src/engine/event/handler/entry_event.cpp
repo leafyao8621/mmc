@@ -43,7 +43,7 @@ void MMC::Engine::EventQueue::EntryEvent::execute(
     Model &model = engine.model();
     EventQueue &event_queue = engine.event_queue();
     size_t slot = model.enter(this->idx, this->entity);
-    double timestamp = model.next_service(this->idx);
+    double timestamp = this->_timestamp + model.next_service(this->idx);
     if (model.is_last(this->idx)) {
         event_queue.add_departure_event(
             engine.increment_id(),

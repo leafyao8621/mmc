@@ -28,7 +28,14 @@ void MMC::Engine::EventQueue::TransferEvent::execute(Engine &engine) {
         event_queue.add_enqueue_event(
             engine.increment_id(), this->_timestamp, this->to, entity);
     }
-
+    if (model.queue_length(from)) {
+        event_queue.add_dequeue_event(
+            engine.increment_id(),
+            this->_timestamp,
+            this->from,
+            this->slot
+        );
+    }
 }
 
 void MMC::Engine::EventQueue::TransferEvent::execute(
@@ -52,5 +59,13 @@ void MMC::Engine::EventQueue::TransferEvent::execute(
     } else {
         event_queue.add_enqueue_event(
             engine.increment_id(), this->_timestamp, this->to, entity);
+    }
+    if (model.queue_length(from)) {
+        event_queue.add_dequeue_event(
+            engine.increment_id(),
+            this->_timestamp,
+            this->from,
+            this->slot
+        );
     }
 }

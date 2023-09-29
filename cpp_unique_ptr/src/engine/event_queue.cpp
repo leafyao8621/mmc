@@ -12,7 +12,7 @@ MMC::Engine::EventQueue::Event &MMC::Engine::EventQueue::get_event() {
 }
 
 void MMC::Engine::EventQueue::remove_event() {
-    std::pop_heap(this->data.begin(), this->data.end());
+    std::pop_heap(this->data.begin(), this->data.end(), this->comp);
     this->data.pop_back();
 }
 

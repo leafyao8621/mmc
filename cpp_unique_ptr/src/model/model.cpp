@@ -5,12 +5,17 @@ void MMC::Model::initialize(
     this->id = 0;
     this->gen.seed(seed);
     this->lambda = lambda;
+    this->_last_idx = n - 1;
     this->servers.reserve(n);
     double *iter_mu = mu;
     size_t *iter_c = c;
     for (size_t i = 0; i < n; ++i, ++iter_mu, ++iter_c) {
         this->servers.push_back(Server(*iter_mu, *iter_c, i == n - 1));
     }
+}
+
+const size_t &MMC::Model::last_idx() const  {
+    return this->_last_idx;
 }
 
 double MMC::Model::next_arrival() {
@@ -28,12 +33,16 @@ const MMC::Model::Entity *MMC::Model::create_entity(double timestamp) {
     return &(*ret);
 }
 
-const size_t &MMC::Model::available(size_t idx) {
+const size_t &MMC::Model::available(size_t idx) const {
     return this->servers[idx].available();
 }
 
-const bool &MMC::Model::is_last(size_t idx) {
+const bool &MMC::Model::is_last(size_t idx) const {
     return this->servers[idx].is_last();
+}
+
+size_t MMC::Model::queue_length(size_t idx) const {
+    return this->servers[idx].queue_length();
 }
 
 void MMC::Model::enqueue(size_t idx, const Entity *entity) {
@@ -54,8 +63,9 @@ const MMC::Model::Entity *MMC::Model::remove(size_t idx, size_t slot) {
 
 double MMC::Model::depart(size_t slot) {
     const Entity *entity = this->servers.back().remove(slot);
+    double out = entity->entry_time;
     this->entities.erase(*entity);
-    return entity->entry_time;
+    return out;
 }
 
 void MMC::Model::log(std::ostream &os) const {

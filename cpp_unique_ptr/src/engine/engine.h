@@ -26,13 +26,13 @@ namespace MMC {
                 class Comparator {
                 public:
                     bool operator()(
-                        std::unique_ptr<Event> &a,
-                        std::unique_ptr<Event> &b);
+                        const std::unique_ptr<Event> &a,
+                        const std::unique_ptr<Event> &b) const;
                 };
                 void log(std::ostream &os);
                 virtual void execute(Engine &engine) = 0;
                 virtual void execute(Engine &engine, std::ostream &os) = 0;
-                const double &timestamp();
+                const double &timestamp() const;
             };
             class ArrivalEvent : public Event {
             public:

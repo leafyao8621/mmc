@@ -15,7 +15,9 @@ void MMC::Engine::EventQueue::ArrivalEvent::execute(Engine &engine) {
         engine.increment_id(),
         this->_timestamp + model.next_arrival()
     );
-    stats.increment_in();
+    if (this->_timestamp >= engine.warmup()) {
+        stats.increment_in();
+    }
     if (model.available(0)) {
         event_queue.add_entry_event(
             engine.increment_id(),
@@ -41,7 +43,9 @@ void MMC::Engine::EventQueue::ArrivalEvent::execute(
         engine.increment_id(),
         this->_timestamp + model.next_arrival()
     );
-    stats.increment_in();
+    if (this->_timestamp >= engine.warmup()) {
+        stats.increment_in();
+    }
     if (model.available(0)) {
         event_queue.add_entry_event(
             engine.increment_id(),

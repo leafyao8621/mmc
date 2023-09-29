@@ -13,7 +13,7 @@ void MMC::Engine::Stats::increment_in() {
 void MMC::Engine::Stats::add_out(double tis) {
     ++this->out_cnt;
     this->tis =
-        this->tis * ((this->out_cnt - 1) / this->out_cnt) + tis / this->out_cnt;
+        this->tis * (this->out_cnt - 1) / this->out_cnt + tis / this->out_cnt;
 }
 
 void MMC::Engine::Stats::log(std::ostream &os) {
