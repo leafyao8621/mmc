@@ -1,61 +1,58 @@
 #include "../../engine.h"
 
-MMC::Engine::EventQueue::EntryEvent::EntryEvent(
-    size_t id,
-    double timestamp,
-    size_t idx,
-    const Model::Entity *entity) {
+MMC::Engine::EventQueue::DequeueEvent::DequeueEvent(
+    size_t id, double timestamp, size_t idx, size_t slot) {
     this->id = id;
     this->_timestamp = timestamp;
     this->idx = idx;
-    this->entity = entity;
+    this->slot = slot;
 }
 
-void MMC::Engine::EventQueue::EntryEvent::execute(Engine &engine) {
+void MMC::Engine::EventQueue::DequeueEvent::execute(Engine &engine) {
     Model &model = engine.model();
     EventQueue &event_queue = engine.event_queue();
-    size_t slot = model.enter(this->idx, this->entity);
+    model.dequeue(this->idx, this->slot);
     double timestamp = this->_timestamp + model.next_service(this->idx);
     if (model.is_last(this->idx)) {
         event_queue.add_departure_event(
             engine.increment_id(),
             timestamp,
-            slot
+            this->slot
         );
     } else {
         event_queue.add_transfer_event(
             engine.increment_id(),
             timestamp,
             this->idx,
-            slot,
+            this->slot,
             this->idx + 1
         );
     }
 }
 
-void MMC::Engine::EventQueue::EntryEvent::execute(
+void MMC::Engine::EventQueue::DequeueEvent::execute(
     Engine &engine, std::ostream &os) {
     Event::log(os);
     os <<
-    "Type: Entry" << std::endl <<
-    "IDX: " << this->idx << std::endl;
-    this->entity->log(os);
+    "Type: Dequeue" << std::endl <<
+    "IDX: " << this->idx << std::endl <<
+    "Slot: " << this->slot << std::endl;
     Model &model = engine.model();
     EventQueue &event_queue = engine.event_queue();
-    size_t slot = model.enter(this->idx, this->entity);
+    model.dequeue(this->idx, this->slot);
     double timestamp = this->_timestamp + model.next_service(this->idx);
     if (model.is_last(this->idx)) {
         event_queue.add_departure_event(
             engine.increment_id(),
             timestamp,
-            slot
+            this->slot
         );
     } else {
         event_queue.add_transfer_event(
             engine.increment_id(),
             timestamp,
             this->idx,
-            slot,
+            this->slot,
             this->idx + 1
         );
     }
